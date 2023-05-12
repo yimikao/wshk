@@ -44,15 +44,15 @@ int get_rawsock_or_die(int);
 
 void set_rawsock_opt();
 
-int packet_read(int, char buffer[BUFFSIZE]);
+// int packet_read(int, char [BUFFSIZE]);
 
-int ethernet_header_parse(ethernet_hdr);
+void ethernet_header_parse(char [BUFFSIZE], ethernet_hdr*);
 
-int ip_header_parse(ip_hdr);
+void ip_header_parse(char [BUFFSIZE], ip_hdr*);
 
-int transport_header_parse(transport_hdr);
+void transport_header_parse(char [BUFFSIZE], transport_hdr*);
 
-int packet_http_data_parse(char buffer[BUFFSIZE], request*, response*);
+int packet_http_data_parse(char [BUFFSIZE], request*, response*);
 
 typedef int (*http_handler_ptr)(request*, response*);
 
