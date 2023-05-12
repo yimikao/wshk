@@ -1,41 +1,41 @@
-#include "wshk.h"
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <netinet/in.h>
-#include <net/if_dl.h>
+// #include <net/ethernet.h>
+#include <errno.h>
+#include <arpa/inet.h>
+#include <netdb.h>
+
 #include <stdlib.h>
 #include <stdio.h>
+#include <unistd.h>
+#include "wshk.h"
 
-
-int rawsocket_create_or_die(int protocol)
+int get_rawsock_or_die(int protocol)
 {
-    int sockfd;
-    // or htons(ETH_P_ALL)
-    sockfd = socket(PF_NDRV, SOCK_RAW, IPPROTO_RAW);
-
-    if (sockfd < 0) {
-        fprintf(stderr, "socket create error\n");
+    // struct addrinfo hints, *res;
+    int sckfd;
+    sckfd = socket(PF_NDRV, SOCK_RAW, IPPROTO_RAW);
+    if(sckfd < 0)
+    {
+        // fprintf(stderr, "socket create", strerr(errno));
+        perror("socket create");
         return -1;
     }
-    return sockfd;
+    return sckfd;
 }
 
-int packet_recv(int sockfd)
+int packet_read(int fd, char buffer[BUFFSIZE])
 {
-    unsigned char *buffer;
-    // source info
+    size_t bytes_read, bytes_recv;
+    // if socket is is not connection-oriented, source info gets filled in 
     struct sockaddr saddr;
+    size_t saddr_len = sizeof (saddr); 
 
-    buffer = (unsigned char *) malloc(65536);
-    int buf_size = sizeof(buffer);
-    memset(buffer, 0, buf_size);
-    int saddr_len = sizeof (saddr);
-
-    // copy network packet
-    int bytes_recv = recvfrom(sockfd, buffer, 0, buf_size, &saddr, (socklen_t *)&saddr_len);
+    bytes_recv = recvfrom(fd, buffer, BUFFSIZE, 0, &saddr, (socklen_t*)&saddr_len);
     if (bytes_recv < 0) {
-        fprintf(stderr, "packet receive error\n");
+        perror("socket read");
         return -1;
     }
-    return 0;
+    return bytes_recv;
 }
