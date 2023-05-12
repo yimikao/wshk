@@ -37,5 +37,12 @@ int packet_read(int fd, char buffer[BUFFSIZE])
         perror("socket read");
         return -1;
     }
+<<<<<<< HEAD
     return bytes_recv;
 }
+=======
+    return 0;
+}
+
+//
+>>>>>>> 65f8479e9e188ccba533e6690474b98d13dd9a02
