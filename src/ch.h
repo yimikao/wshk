@@ -1,5 +1,5 @@
-#ifndef C_H
-#define C_H
+#ifndef CH_H
+#define CH_H
 
 #include <stdio.h>
 #include <string.h>
