@@ -10,20 +10,20 @@
 
 #define BUFFSIZE 1024
 
-typedef struct ethernet_hdr
+typedef struct ethernethd
 {
-    struct ether_header e_hdr;
-} ethernet_hdr;
+    struct ether_header ehd;
+} ethernethd;
 
-typedef struct ip_hdr
+typedef struct iphd
 {
-    struct ip i_hdr;
-} ip_hdr;
+    struct ip ihd;
+} iphd;
 
-typedef struct transport_hdr
+typedef struct transporthd
 {
-    struct tcphdr t_hdr;
-} transport_hdr;
+    struct tcphdr thd;
+} transporthd;
 
 typedef struct request
 {
@@ -46,11 +46,15 @@ void set_rawsock_opt();
 
 // int packet_read(int, char [BUFFSIZE]);
 
-void ethernet_header_parse(char [BUFFSIZE], ethernet_hdr*);
+void ethernet_header_parse(char [BUFFSIZE], ethernethd*);
 
-void ip_header_parse(char [BUFFSIZE], ip_hdr*);
+void ip_header_parse(char [BUFFSIZE], iphd*);
 
-void transport_header_parse(char [BUFFSIZE], transport_hdr*);
+void transport_header_parse(char [BUFFSIZE], transporthd*);
+
+void app_header_parse(char [BUFFSIZE], char*);
+
+void print_headers(ethernethd*, iphd*);
 
 int packet_http_data_parse(char [BUFFSIZE], request*, response*);
 

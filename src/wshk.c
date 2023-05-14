@@ -19,7 +19,7 @@ int get_rawsock_or_die(int protocol)
     if(sckfd < 0)
     {
         // fprintf(stderr, "socket create", strerr(errno));
-        perror("socket create");
+        perror("socket create\n");
         return -1;
     }
     return sckfd;
@@ -40,24 +40,33 @@ int packet_read(int fd, char buffer[BUFFSIZE])
     return bytes_recv;
 }
 
-void ethernet_header_parse(char *buffer, ethernet_hdr *e_hdr)
+void ethernet_header_parse(char *buffer, ethernethd *ehd)
 {
-    e_hdr = (ethernet_hdr*) buffer;
+    ehd = (ethernethd*) buffer;
 }
 
 
-void ip_header_read(char buffer[BUFFSIZE], ip_hdr *i_hdr)
+void ip_header_parse(char buffer[BUFFSIZE], iphd *ihd)
 {
-    i_hdr = (ip_hdr*) (buffer + sizeof(ethernet_hdr));
+    ihd = (iphd*) (buffer + sizeof(ethernethd));
 }
 
-void transport_header_read(char buffer[BUFFSIZE], transport_hdr *t_hdr)
+void transport_header_parse(char buffer[BUFFSIZE], transporthd *thd)
 {
     // The size of the IP header varies from 20 bytes to 60 bytes.
     // We can calculate this from the IP header field or IHL. IHL means
     // Internet Header Length (IHL), which is the number of 32-bit words in the header.
     // So we have to multiply the IHL by 4 to get the size of the header in bytes
-    ip_hdr *i_hdr = (ip_hdr*) (buffer + sizeof(ethernet_hdr));
-    size_t iphdr_len = i_hdr->i_hdr.ip_hl * 4;
-    t_hdr = (transport_hdr*) (buffer + sizeof(ethernet_hdr) + iphdr_len);
+    iphd *ihd = (iphd*) (buffer + sizeof(ethernethd));
+    size_t iphd_len = ihd->ihd.ip_hl * 4;
+    thd = (transporthd*) (buffer + sizeof(ethernethd) + iphd_len);
+}
+
+void app_header_parse(char buffer[BUFFSIZE], char *data)
+{
+    iphd *ih = (iphd*) (buffer + sizeof(ethernethd));
+    size_t ihlen = ih->ihd.ip_hl * 4;
+    transporthd *th = (transporthd*) (buffer + sizeof(ethernethd) + ihlen);
+    size_t thlen = sizeof(th);
+    data = buffer + thlen;
 }
