@@ -6,9 +6,6 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
 #include "wshk.h"
 
 int get_rawsock_or_die(int protocol)
@@ -18,8 +15,6 @@ int get_rawsock_or_die(int protocol)
     sckfd = socket(PF_NDRV, SOCK_RAW, IPPROTO_RAW);
     if(sckfd < 0)
     {
-        // fprintf(stderr, "socket create", strerr(errno));
-        perror("socket create\n");
         return -1;
     }
     return sckfd;
@@ -34,7 +29,6 @@ int packet_read(int fd, char buffer[BUFFSIZE])
 
     bytes_recv = recvfrom(fd, buffer, BUFFSIZE, 0, &saddr, (socklen_t*)&saddr_len);
     if (bytes_recv < 0) {
-        perror("socket read");
         return -1;
     }
     return bytes_recv;
@@ -69,4 +63,13 @@ void app_header_parse(char buffer[BUFFSIZE], char *data)
     transporthd *th = (transporthd*) (buffer + sizeof(ethernethd) + ihlen);
     size_t thlen = sizeof(th);
     data = buffer + thlen;
+}
+
+void print_headers(ethernethd *ehd, iphd *ihd, transporthd *thd, char *data)
+{
+}
+
+int packet_http_data_parse(char[BUFFSIZE], request *, response *)
+{
+    return 0;
 }

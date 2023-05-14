@@ -6,6 +6,7 @@
         "__threading_support": "c",
         "cerrno": "c",
         "locale": "c",
-        "tcp.h": "c"
+        "tcp.h": "c",
+        "ch.h": "c"
     }
 }

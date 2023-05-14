@@ -37,14 +37,13 @@ typedef struct response
     char *method;
 } response;
 
+typedef int (*http_handler_ptr)(request*, response*);
 
 int get_rawsock_or_die(int);
 
-
-
 void set_rawsock_opt();
 
-// int packet_read(int, char [BUFFSIZE]);
+int packet_read(int, char [BUFFSIZE]);
 
 void ethernet_header_parse(char [BUFFSIZE], ethernethd*);
 
@@ -54,11 +53,9 @@ void transport_header_parse(char [BUFFSIZE], transporthd*);
 
 void app_header_parse(char [BUFFSIZE], char*);
 
-void print_headers(ethernethd*, iphd*);
+void print_headers(ethernethd*, iphd*, transporthd*, char*);
 
 int packet_http_data_parse(char [BUFFSIZE], request*, response*);
-
-typedef int (*http_handler_ptr)(request*, response*);
 
 int http_handler(request*, response*);
 
