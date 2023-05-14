@@ -67,6 +67,30 @@ void app_header_parse(char buffer[BUFFSIZE], char *data)
 
 void print_headers(ethernethd *ehd, iphd *ihd, transporthd *thd, char *data)
 {
+    printf("############################################\n");
+    printf("ETHERNET HEADER\n\n");
+    printf(
+        "Source Addr: %s\n"
+        "Destination Addr: %s\n"
+        "Protocol: %s\n"
+        "############################################\n",
+
+        ehd->ehd.ether_shost,
+        ehd->ehd.ether_dhost,
+        ehd->ehd.ether_type
+    );
+
+    printf("IP HEADER\n\n");
+    printf(
+        "Source IP: %s\n"
+        "Destination IP: %s\n"
+        "Protocol: %s\n"
+        "############################################\n",
+
+        inet_ntoa(ihd->ihd.ip_src),
+        inet_ntoa(ihd->ihd.ip_dst),
+        ihd->ihd.ip_p
+    );
 }
 
 int packet_http_data_parse(char[BUFFSIZE], request *, response *)
